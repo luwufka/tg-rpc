@@ -1,0 +1,8 @@
+discord.py
+aiogram
+loguru
+colorama
+requests
+aiohttp
+pillow
+python-dotenv
