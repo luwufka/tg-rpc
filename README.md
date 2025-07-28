@@ -31,11 +31,11 @@ This is a rather unusual method I came up with :/
 3. Set the values in the `.env` file:
 ```
 DISCORD_TOKEN = <Bot Token>
-DISCORD_GUILD_ID = <ID сервера>
-DISCORD_MEMBER_ID = <ID участника>
+DISCORD_GUILD_ID = <Server ID>
+DISCORD_MEMBER_ID = <Member ID>
 
 TELEGRAM_TOKEN = <Bot Token>
-TELEGRAM_CHAT_ID = <ID канала>
+TELEGRAM_CHAT_ID = <Channel ID>
 ```
 4. *Optionally, in `config.py`, you can configure proxy settings, activity headers, etc.*
 5. **Run: `python ./src/.`**

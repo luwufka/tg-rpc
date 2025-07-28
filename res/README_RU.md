@@ -27,12 +27,12 @@ _[> Read on english ](/README.md)_
 2. Установите зависимости: `pip install -r ./src/requirements.txt`
 3. Установите значения в `.env` файле:
 ```
-DISCORD_TOKEN = "токен бота"
-DISCORD_GUILD_ID = ID сервера
-DISCORD_MEMBER_ID = ID участника
+DISCORD_TOKEN = <Bot Token>
+DISCORD_GUILD_ID = <Server ID>
+DISCORD_MEMBER_ID = <Member ID>
 
-TELEGRAM_TOKEN = "токен бота"
-TELEGRAM_CHAT_ID = ID канала
+TELEGRAM_TOKEN = <Bot Token>
+TELEGRAM_CHAT_ID = <Channel ID>
 ```
 4. **В `config.py` можете настроить прокси, заголовки активностей и т.д.**
 5. **Run: `python ./src/.`**
@@ -42,11 +42,11 @@ TELEGRAM_CHAT_ID = ID канала
 2. Создайте контейнер, установите все необходимые переменные окружения:
 ```
 DISCORD_TOKEN = <Bot Token>
-DISCORD_GUILD_ID = <ID сервера>
-DISCORD_MEMBER_ID = <ID участника>
+DISCORD_GUILD_ID = <Server ID>
+DISCORD_MEMBER_ID = <Member ID>
 
 TELEGRAM_TOKEN = <Bot Token>
-TELEGRAM_CHAT_ID = <ID канала>
+TELEGRAM_CHAT_ID = <Channel ID>
 ```
 3. **В `config.py` можете настроить прокси, заголовки активностей и т.д.**
 
