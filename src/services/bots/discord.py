@@ -14,15 +14,19 @@ intents.guilds = True
 intents.members = True
 intents.message_content = True
 
+ALLOWED_TYPES = [discord.ActivityType.playing, discord.ActivityType.listening, discord.ActivityType.watching]
 last_rpc_hash = None
 
 ready_event = asyncio.Event()
+
 async def init():
     global GUILD_ID, MEMBER_ID, RPC_WATCHER_INTERVAL, BOT_TOKEN, client
+    
     # init env
     GUILD_ID = int(os.getenv('DISCORD_GUILD_ID'))
     MEMBER_ID = int(os.getenv('DISCORD_MEMBER_ID'))
     BOT_TOKEN = os.getenv('DISCORD_TOKEN')
+
     # init client
     if DISCORD_PROXY:
         logger.info("* Init with proxy.")
@@ -35,43 +39,60 @@ async def init():
         logger.info(f'{client.user.name} has ready!')
         ready_event.set()
 
+def get_valid_act(acts):
+    if not acts:
+        return None
+    
+    if SORT_ACTIVITIES:
+        acts = sorted(acts, key=lambda act: (
+            ALLOWED_TYPES.index(act.type) if act.type in ALLOWED_TYPES 
+            else len(ALLOWED_TYPES)
+        ))
+    
+    for act in acts:
+        if act.type in ALLOWED_TYPES:
+            return act
+    
+    return None
+
+async def handle_act(act):
+    global last_rpc_hash
+    
+    if act is None or act.large_image_url is None:
+        if last_rpc_hash is not None:
+            last_rpc_hash = None
+            await events.call(RPC_UPDATED, None)
+        return
+    
+    rpc_hash = hashlib.md5(str(act.to_dict()).encode('utf-8')).hexdigest()
+    
+    if rpc_hash != last_rpc_hash:
+        last_rpc_hash = rpc_hash
+        logger.debug(f"RPC Updated! [{act.name} - {act.details}]")
+        
+        if LOGGING_ACTIVITY_DICTIONARY:
+            logger.trace(str(act.to_dict()))
+            
+        ret_act = Activity(act)
+        await events.call(RPC_UPDATED, ret_act)
+
 async def watcher_loop():
     global last_rpc_hash
     await ready_event.wait()
     
     guild = client.get_guild(GUILD_ID)
     if guild is None:
-        logger.error(f'Guild {Fore.WHITE}[ID: {GUILD_ID}]{Fore.RED} not found!')
+        logger.error(f'Guild [ID: {GUILD_ID}] not found!')
         return
     
     member = guild.get_member(MEMBER_ID)
     if member is None:
-        logger.error(f'Member {Fore.WHITE}[ID: {MEMBER_ID}]{Fore.RED} not found!')
+        logger.error(f'Member [ID: {MEMBER_ID}] not found!')
         return
     
-    ALLOWED_TYPES = [discord.ActivityType.playing, discord.ActivityType.listening, discord.ActivityType.watching]
-
     while True:
-        acts = member.activities
-
-        if acts:
-            if SORT_ACTIVITIES: # sort acts
-                if SORT_ACTIVITIES:
-                    acts = sorted(acts, key=lambda activity: (ALLOWED_TYPES.index(activity.type) if activity.type in ALLOWED_TYPES else len(ALLOWED_TYPES)))
-            for act in acts:
-                if act.type in ALLOWED_TYPES:
-                    rpc_hash = hashlib.md5(str(act.to_dict()).encode('utf-8')).hexdigest()
-
-                    if rpc_hash != last_rpc_hash:
-                        last_rpc_hash = rpc_hash
-                        logger.debug(f"RPC Updated! {Fore.WHITE}[{Fore.YELLOW}{act.name} - {act.details}{Fore.WHITE}]")
-
-                        ret_act = Activity(act)
-                        if LOGGING_ACTIVITY_DICTIONARY:
-                            logger.trace(str(act.to_dict()))
-                        await events.call(RPC_UPDATED, ret_act)
-                    break
-                
+        act = get_valid_act(member.activities)
+        await handle_act(act)
         await asyncio.sleep(RPC_WATCHER_INTERVAL / 1000)
 
 async def start_client():

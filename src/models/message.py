@@ -18,6 +18,16 @@ class Message:
         self.last_task = asyncio.create_task(self.handle(act))
         logger.debug("Message task has been started.")
 
+    async def pause(self):
+        if self.last_task:
+            self.last_task.cancel()
+        try:
+            if self.message_id:
+                await telegram.delete_message(self.chat_id, self.message_id)
+        except: pass
+        self.message_id = None
+        logger.debug("Message removed, task paused.")
+
     async def handle(self, act: Activity):
         try:
             while True:

@@ -32,8 +32,12 @@ async def telegram_task():
 # == handlers ==
 @events.on_call(RPC_UPDATED)
 async def on_call(act: Activity):
-    await channel.update(act)
-    await message.run_task(act)
+    if act is None:
+        await channel.reset()
+        await message.pause()
+    else:
+        await channel.update(act)
+        await message.run_task(act)
 
 # == main ==
 async def main():

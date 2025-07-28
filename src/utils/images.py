@@ -14,8 +14,8 @@ def ret_bif(url: str, resize: bool = False) -> BufferedInputFile:
     
     HASH = hashlib.md5(url.encode()).hexdigest()
 
-    if HASH in cache:
-        return cache[HASH]
+    if HASH in cache and cache[HASH]['isResized'] == resize:
+        return cache[HASH]['file']
     
     response = requests.get(url, proxies={"http": DISCORD_PROXY, "https": DISCORD_PROXY})
 
@@ -38,8 +38,8 @@ def ret_bif(url: str, resize: bool = False) -> BufferedInputFile:
     background.save(ret, format="JPEG")
     ret.seek(0)
     
-    cache[HASH] = BufferedInputFile(ret.getvalue(), filename="rpc_asset.jpg")
-    return cache[HASH]
+    cache[HASH] = {'file': BufferedInputFile(ret.getvalue(), filename="rpc_asset.jpg"), 'isResized': resize}
+    return cache[HASH]['file']
 
 def resize_img(image: Image, size: tuple = (512, 512)) -> Image:
     w, h = image.size
@@ -60,3 +60,10 @@ def get_avg_color(image: Image) -> tuple:
     avg_g = sum([pixel[1] for pixel in pixels]) // len(pixels)
     avg_b = sum([pixel[2] for pixel in pixels]) // len(pixels)
     return (avg_r, avg_g, avg_b)
+
+def get_empty_avatar() -> BufferedInputFile:
+    avatar = Image.new("RGB", (720, 720), "#111111")
+    ret = io.BytesIO()
+    avatar.save(ret, format="JPEG")
+    ret.seek(0)
+    return BufferedInputFile(ret.getvalue(), filename="empty.jpg")
