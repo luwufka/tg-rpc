@@ -21,4 +21,3 @@ events = EventSystem()
 
 # == events ==
 RPC_UPDATED = "rpc_updated"
-AVATAR_UPDATED = "avatar_updated"

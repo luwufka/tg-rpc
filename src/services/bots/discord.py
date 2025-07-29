@@ -2,7 +2,7 @@ import discord
 import asyncio
 import os
 import hashlib
-from config import RPC_WATCHER_INTERVAL, SORT_ACTIVITIES, DISCORD_PROXY, LOGGING_ACTIVITY_DICTIONARY
+from config import RPC_WATCHER_INTERVAL, SORT_ACTIVITIES, DISCORD_PROXY
 from loguru import logger
 from services.events import events, RPC_UPDATED
 from colorama import Fore
@@ -21,7 +21,7 @@ ready_event = asyncio.Event()
 
 async def init():
     global GUILD_ID, MEMBER_ID, RPC_WATCHER_INTERVAL, BOT_TOKEN, client
-    
+
     # init env
     GUILD_ID = int(os.getenv('DISCORD_GUILD_ID'))
     MEMBER_ID = int(os.getenv('DISCORD_MEMBER_ID'))
@@ -55,11 +55,19 @@ def get_valid_act(acts):
     
     return None
 
-async def handle_act(act):
+async def handle_act(act):    
     global last_rpc_hash
     
-    if act is None or act.large_image_url is None:
-        if last_rpc_hash is not None:
+    if act is None:
+        if last_rpc_hash != None:
+            last_rpc_hash = None
+            await events.call(RPC_UPDATED, None)
+        return
+    
+    ret_act = Activity(act)
+    
+    if ret_act.assets.large_image_url is None:
+        if last_rpc_hash != None:
             last_rpc_hash = None
             await events.call(RPC_UPDATED, None)
         return
@@ -68,12 +76,8 @@ async def handle_act(act):
     
     if rpc_hash != last_rpc_hash:
         last_rpc_hash = rpc_hash
-        logger.debug(f"RPC Updated! [{act.name} - {act.details}]")
-        
-        if LOGGING_ACTIVITY_DICTIONARY:
-            logger.trace(str(act.to_dict()))
-            
-        ret_act = Activity(act)
+        logger.debug(f"RPC Updated! [{ret_act.name} - {ret_act.details}]")
+        logger.trace(str(act.to_dict()))
         await events.call(RPC_UPDATED, ret_act)
 
 async def watcher_loop():
@@ -92,7 +96,7 @@ async def watcher_loop():
     
     while True:
         act = get_valid_act(member.activities)
-        await handle_act(act)
+        await handle_act(act) 
         await asyncio.sleep(RPC_WATCHER_INTERVAL / 1000)
 
 async def start_client():

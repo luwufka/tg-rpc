@@ -1,4 +1,5 @@
 from datetime import datetime
+from config import SPOTIFY_LOGO_URL
 import discord
 import utils.images
 
@@ -16,18 +17,31 @@ class ActivityAssets:
         return utils.images.ret_bif(self.small_image_url)
 
 class Activity:
-    def __init__(self, act: discord.Activity):
-        self.name = act.name
-        self.assets = ActivityAssets(act.large_image_url, act.small_image_url)
-        self.type = act.type
-        self.start_time = act.start
-        self.end_time = act.end
-        if (self.end_time):
-            self.track_length = act.end - act.start
-        self.details = act.details
-        self.state = act.state
-        self.large_text = act.assets.get("large_text", None)
-        self.large_url = act.assets.get("large_url", None)
+    def __init__(self, act: discord.Activity | discord.Spotify):
+        if isinstance(act, discord.Activity):
+            self.name = act.name
+            self.assets = ActivityAssets(act.large_image_url, act.small_image_url)
+            self.type = act.type
+            self.start_time = act.start
+            self.end_time = act.end
+            if (self.end_time):
+                self.track_length = act.end - act.start
+            self.details = act.details
+            self.state = act.state
+            self.large_text = act.assets.get("large_text", None)
+            self.large_url = act.assets.get("large_url", None)
+        elif isinstance(act, discord.Spotify):
+            self.name = "Spotify"
+            self.assets = ActivityAssets(act.album_cover_url, SPOTIFY_LOGO_URL)
+            self.type = discord.ActivityType.listening
+            self.start_time = act.start
+            self.end_time = act.end
+            if (self.end_time):
+                self.track_length = self.end_time - self.start_time
+            self.details = act._details
+            self.state = act._state
+            self.large_text = None
+            self.large_url = None
 
     def format_time(self, total_seconds: int) -> str:
         days = total_seconds // (24 * 3600)

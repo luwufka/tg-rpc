@@ -15,6 +15,7 @@ def ret_bif(url: str, resize: bool = False) -> BufferedInputFile:
     HASH = hashlib.md5(url.encode()).hexdigest()
 
     if HASH in cache and cache[HASH]['isResized'] == resize:
+        logger.trace(f"Using cached image for: {Fore.WHITE}{url}")
         return cache[HASH]['file']
     
     response = requests.get(url, proxies={"http": DISCORD_PROXY, "https": DISCORD_PROXY})
@@ -22,6 +23,8 @@ def ret_bif(url: str, resize: bool = False) -> BufferedInputFile:
     if response.status_code != 200:
         logger.error(f"Failed to download asset {Fore.WHITE}[Code: {response.status_code}]")
         return None
+    elif response.status_code == 200:
+        logger.trace(f"Image downloaded! URL: {Fore.WHITE}{url}")
     
     CONTENT = io.BytesIO(response.content)
 

@@ -1,8 +1,8 @@
 from models.activity import Activity
 from services.bots import telegram
-from services.events import events, AVATAR_UPDATED
 from config import ACTIVITY_TITLES, ACT_NONE_TITLE
 from loguru import logger
+from colorama import Fore
 from utils import images
 import hashlib
 
@@ -17,15 +17,14 @@ class Channel:
             avatar_hash = hashlib.md5(str(act.assets.large_image_url).encode('utf-8')).hexdigest()
             if avatar_hash != self.last_avatar_hash:
                 await telegram.edit_photo(self.chat_id, act.assets.get_large_image())
-                await events.call(AVATAR_UPDATED)
                 self.last_avatar_hash = avatar_hash
+                logger.info(f"Channel {Fore.WHITE}PHOTO{Fore.BLUE} updated.")
 
             title = self.get_title_with_type_prefix(act) + " " + act.name
             if title != self.last_title:
                 await telegram.edit_title(self.chat_id, title)
                 self.last_title = title
-            
-            logger.debug("Channel has been updated.")
+                logger.info(f"Channel {Fore.WHITE}TITLE{Fore.BLUE} updated.")
         except Exception as ex:
             logger.error(ex)
 

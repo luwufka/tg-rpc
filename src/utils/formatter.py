@@ -41,7 +41,6 @@ def format_act(act: Activity, time_prefix: str) -> str:
     
     result.append(f"\r\n<b>{time_prefix} {act.get_elapsed_time()}</b>")
     
-    logger.trace("Activity formatted.")
     return "\n".join(result)
 
 
@@ -71,6 +70,5 @@ def format_tl_act(act: Activity) -> str:
             result.append(f"<a href='{act.large_url}'>&gt; {act.large_text}</a>")
         else:
             result.append(f"- {act.large_text}")
-    
-    logger.trace("Activity with timeline formatted.")
+            
     return "\n".join(result)
