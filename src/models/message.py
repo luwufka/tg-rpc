@@ -45,7 +45,7 @@ class Message:
                                 await telegram.edit_media(self.chat_id, self.message_id, formatter.get_message_text(act), act.assets.get_small_image())
                                 self.last_img_hash = small_hash
                             else:
-                                await telegram.edit_caption(self.chat_id, self.message_id, formatter.get_message_text(act))
+                                await telegram.edit_media(self.chat_id, self.message_id, formatter.get_message_text(act))
                         else:
                             try:
                                 await telegram.edit_text(self.chat_id, self.message_id, formatter.get_message_text(act))
