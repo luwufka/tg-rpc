@@ -42,7 +42,7 @@ async def send_message(chat_id: int, text: str, media: BufferedInputFile = None)
         logger.trace(f"Message has sent.")
     return ret_msg.message_id
 
-async def edit_caption(chat_id: int, message_id: int, text: str, media: BufferedInputFile = None):
+async def edit_media(chat_id: int, message_id: int, text: str, media: BufferedInputFile = None):
     if media:
         input_media = InputMediaPhoto(media=media)
         await bot.edit_message_media(input_media, chat_id=chat_id, message_id=message_id)

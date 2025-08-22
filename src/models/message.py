@@ -42,12 +42,16 @@ class Message:
                     else:
                         if act.assets.small_image_url:
                             if self.last_img_hash != small_hash:
-                                await telegram.edit_caption(self.chat_id, self.message_id, formatter.get_message_text(act), act.assets.get_small_image())
+                                await telegram.edit_media(self.chat_id, self.message_id, formatter.get_message_text(act), act.assets.get_small_image())
                                 self.last_img_hash = small_hash
                             else:
                                 await telegram.edit_caption(self.chat_id, self.message_id, formatter.get_message_text(act))
                         else:
-                            await telegram.edit_text(self.chat_id, self.message_id, formatter.get_message_text(act))
+                            try:
+                                await telegram.edit_text(self.chat_id, self.message_id, formatter.get_message_text(act))
+                            except:
+                                await telegram.delete_message(self.chat_id, self.message_id)
+                                await telegram.send_message(self.chat_id, formatter.get_message_text(act))
                             self.last_img_hash = None
                 except TelegramAPIError as ex:
                     logger.error(ex)
