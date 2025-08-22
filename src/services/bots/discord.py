@@ -2,11 +2,12 @@ import discord
 import asyncio
 import os
 import hashlib
-from config import RPC_WATCHER_INTERVAL, SORT_ACTIVITIES, DISCORD_PROXY
+from config import RPC_WATCHER_INTERVAL, SORT_ACTIVITIES
 from loguru import logger
 from services.events import events, RPC_UPDATED
 from colorama import Fore
 from models.activity import Activity
+from utils.proxy import get_proxy
 
 intents = discord.Intents.default()
 intents.presences = True
@@ -28,11 +29,12 @@ async def init():
     BOT_TOKEN = os.getenv('DISCORD_TOKEN')
 
     # init client
-    if DISCORD_PROXY:
-        logger.info("* Init with proxy.")
-        client = discord.Client(intents=intents, proxy=DISCORD_PROXY)
-    else:
+    ds_proxy = get_proxy()
+    if ds_proxy == "":
         client = discord.Client(intents=intents)
+    else:
+        logger.info("* Init with proxy.")
+        client = discord.Client(intents=intents, proxy=ds_proxy)
 
     @client.event
     async def on_ready():

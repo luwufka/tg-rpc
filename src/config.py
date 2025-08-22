@@ -11,6 +11,6 @@ ACTIVITY_TITLES = {
     ActivityType.listening: "🎵 Listening to",
     ActivityType.watching: "📺 Watching"
 }
-ACT_NONE_TITLE = "No activity . . ." # channel name when activity is None
-DISCORD_PROXY = "" # example: http://127.0.0.1:2080
+
+ACT_NONE_TITLE = "No activity." # channel name when activity is None
 SPOTIFY_LOGO_URL = "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png"

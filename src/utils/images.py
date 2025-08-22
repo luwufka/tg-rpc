@@ -1,9 +1,10 @@
 from aiogram.types import BufferedInputFile
 from loguru import logger
 from colorama import Fore
-from config import MAX_ASSET_CACHE_SIZE, DISCORD_PROXY
+from config import MAX_ASSET_CACHE_SIZE
 from PIL import Image
 import requests, hashlib, sys, io
+from utils.proxy import get_proxy
 
 cache = {}
 
@@ -18,7 +19,7 @@ def ret_bif(url: str, resize: bool = False) -> BufferedInputFile:
         logger.trace(f"Using cached image for: {Fore.WHITE}{url}")
         return cache[HASH]['file']
     
-    response = requests.get(url, proxies={"http": DISCORD_PROXY, "https": DISCORD_PROXY})
+    response = requests.get(url, proxies={"http": get_proxy(), "https": get_proxy()})
 
     if response.status_code != 200:
         logger.error(f"Failed to download asset {Fore.WHITE}[Code: {response.status_code}]")

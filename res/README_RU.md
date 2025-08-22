@@ -44,6 +44,7 @@ TELEGRAM_CHAT_ID = <Channel ID>
 DISCORD_TOKEN = <Bot Token>
 DISCORD_GUILD_ID = <Server ID>
 DISCORD_MEMBER_ID = <Member ID>
+DISCORD_PROXY = <Proxy URL: http://127.0.0.1:2080>
 
 TELEGRAM_TOKEN = <Bot Token>
 TELEGRAM_CHAT_ID = <Channel ID>
