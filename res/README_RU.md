@@ -12,12 +12,12 @@ _[> Read on english ](/README.md)_
 
 Однако, если указать в своем профиле личный канал, можно отобразить некоторую информацию:
 
-| **Discord RPC**              | **Telegram Channel**    |
-|------------------------------|-------------------------|
-| Name                         | Channel Name            |
-| Large Icon                   | Channel Avatar          |
-| Details, State, etc.         | Last Post Text          |
-| Small Icon                   | Last Post Media         |
+| **Активность в Discord** | **Telegram канал** |
+| ------------------------ | -------------------|
+| Name                     | Channel Name       |
+| Large Icon               | Channel Avatar     |
+| Details, State, etc.     | Last Post Text     |
+| Small Icon               | Last Post Media    | 
 
 Вот такой необычный способ я придумал :/
 
