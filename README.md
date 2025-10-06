@@ -13,12 +13,12 @@
 
 However, if you specify your personal channel in your profile, some information can be displayed:
 
-| **Discord RPC**      | **Telegram Channel** |
-| -------------------- | -------------------- |
+| **Discord Activity** | **Telegram Channel** |
+| -------------------- | ---------------------|
 | Name                 | Channel Name         |
 | Large Icon           | Channel Avatar       |
 | Details, State, etc. | Last Post Text       |
-| Small Icon           | Last Post Media      |
+| Small Icon           | Last Post Media      | 
 
 This is a rather unusual method I came up with :/
 
