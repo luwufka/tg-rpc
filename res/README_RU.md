@@ -24,7 +24,7 @@ _[> Read on english ](/README.md)_
 # Инструкция по установке
 ## Обычный запуск
 1. Убедитесь, что у вас установлен [Python](https://www.python.org)
-2. Установите зависимости: `pip install -r ./src/requirements.txt`
+2. Установите зависимости: `pip install -r requirements.txt`
 3. Установите значения в `.env` файле:
 ```
 DISCORD_TOKEN = <Bot Token>
