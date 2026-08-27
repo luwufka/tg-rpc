@@ -5,7 +5,7 @@
 
 <br>
 
-*[> Читать на русском ](./res/README_RU.md)*
+[🇷🇺 Читать на русском ](./README.ru.md)
 
 # How does it work?
 

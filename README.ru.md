@@ -1,11 +1,11 @@
 # Telegram RPC
 
-<img src="vscode_rpc.png" width="500">
-<img src="ym_rpc.png" width="500">
+<img src="./res/vscode_rpc.png" width="500">
+<img src="./res/ym_rpc.png" width="500">
 
 <br>
 
-_[> Read on english ](/README.md)_
+[🇺🇸 Read on English ](./README.md)
 
 # Как это работает?
 **Telegram не имеет встроенного RPC или что-то похожее на это.**
