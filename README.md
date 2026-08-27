@@ -27,7 +27,7 @@ This is a rather unusual method I came up with :/
 ## Standart Setup
 
 1. Make sure you have [Python](https://www.python.org) installed.
-2. Install dependencies: `pip install -r ./src/requirements.txt`
+2. Install dependencies: `pip install -r requirements.txt`
 3. Set the values in the `.env` file:
 ```
 DISCORD_TOKEN = <Bot Token>
